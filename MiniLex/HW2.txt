@@ -1,0 +1,190 @@
+------------------------------------------------------------------------
+CS321 Compilers and Language Design I                         Homework 2
+------------------------------------------------------------------------
+
+This assignment is *FOR CREDIT* and is due at the start of class on
+Thursday, October 18 if you submit in person, or by noon the same day
+if you submit by email.
+
+-----------
+ADVICE: (yes, it's the same as on the previous homework, but perhaps
+you didn't read it all last time ...)
+
+0) Read this assignment carefully
+
+1) Start this assignment early
+
+2) Ask if you get stuck or are not sure what is intended.
+
+3) Remember the guidelines that I gave about what I'm looking for in
+homework submissions (and, if you don't remember them, go back and
+review the Administrative video/slides from Week 1)
+
+4) The solutions that you turn in should be your own, individual work.
+If you don't understand what is expected or how to do it, ask for
+help, and don't copy from somebody else (or write something down that
+you don't fully understand).
+
+5) Be sure to follow the homework submission guidelines that are posted
+on the class web page at: http://web.cecs.pdx.edu/~mpj/cs321/#hsg.  If
+you do not follow these guidelines, I may not be able to accept your
+submission!
+
+6) Ask if you get stuck or are not sure what is intended.  Yes, it's
+important enough that it deserves to appear this list two times!
+
+-----------
+
+Introduction:
+-------------
+This exercise is designed to give you some hands-on experience
+using a lexical analyzer generator tool such as lex, flex, jflex,
+etc.  The examples that we have talked about in class have shown
+general ideas that are applicable to many of the tools in this
+family, but you will likely need to adjust and adapt those ideas,
+at least in some small ways, to suit the specific tool that you
+use in this exercise.  By default, I am going to assume that you
+are using jflex (available from www.jflex.de, and also linked from
+the class web page) for this exercise, but you are free to use a
+different tool (and even a different programming language) if you
+prefer, so long as it is broadly similar in style (lex-like
+syntax, use of regular expressions, etc.)  If you would like to
+use a specific tool other than jflex and are not sure if it will
+be suitable, please ask me (and include pointers to reference
+documentation for the tool you'd like to use in case it's not one
+that I'm familiar with).  Regardless of which tool you choose,
+expect to spend some non-trivial amount of time reading the
+documentation for that tool.  The examples from class should have
+prepared you for this task, but expect to find some differences
+(and, perhaps, also some strong hints/code fragments that you can
+use in your solution).  Reading and using the documentation in
+this way is very much a part of this assignment, and it is exactly
+the kind of thing you would have to do if you were using the tool
+for a practical project outside this class.
+
+In your answers to Questions 1 and 2 below, be sure to include careful
+descriptions of what you have done, and of why you have done it
+that way, as well as summaries of testing that you have carried
+out to confirm that your code is working correctly.  Turning in
+only plain code, for example, even if includes comments or highlighting, will
+likely not earn full marks.
+
+Question 0:
+-----------
+Choose a lex-like tool that is suitable for the language that you
+wish to use for the rest of this assignment, install it, read the
+documentation, and check that you can build and run at least one
+of the examples that comes with your chosen tool.  The following
+text will be written with the assumption that you are using jflex
+and Java, but you may substitute a different toolset if you
+prefer, as described previously.  There's no sensible way for me
+to grade you on this part of the assignment, so I don't expect you
+to turn in any kind of solution for this question ... but you skip
+it at your peril.
+
+Question 1:
+-----------
+Now to the main task, which is to use your choice of lex-like tool
+to build and test a program for generating syntax colored versions
+of Mini programs.  More specifically, your goal is to use a lexer
+generator to write a program that will read Mini programs as
+input, perform lexical analysis to identify tokens, and output an
+HTML file that contains a syntax-colored version of the input.
+(Note that no special knowledge of HTML or CSS beyond what is shown
+below should be required or assumed in this question.)
+
+At its core, your program should be written using your choice of
+lex-like tool to detect the different kinds of lexeme/token that
+can be used in a Mini program and to take appropriate action in
+each case.  You should study the description of the set of valid
+lexemes/tokens for Mini that is described by the jflex code in
+mini/Mini.java, and you may find that text useful as a starting
+point for your syntax coloring tool.  If you plan to use a
+different lexer generator and/or programming language, then you
+may need to make a few small adjustments (for example, in
+specifying the exact syntax of an identifier), but the basic
+ideas should all carry across fairly directly.
+
+For any valid input file, your program should produce output
+text of the following form.  (You will find a simple example to
+illustrate what the syntax colored output might look like in a
+specific case on the class web page.)
+
+<html>
+<head>
+<title>My Syntax Colored Web Page</title>
+<style type="text/css">
+  body     {white-space:pre;
+            background-color:#ffffcc;
+            color:black;
+            font-family:"Lucida Console","Courier New",Monotype}
+  .keyword {color:blue}
+  .comment {color:orange}
+  .literal {color:green}
+  .invalid {color:red}
+</style>
+</head>
+<body>
+OUTPUT GOES HERE
+</body>
+</html>
+
+All of this text will be exactly the same in every generated
+output except for the part that is written as "OUTPUT GOES
+HERE"; that's the point at which you should instead insert the
+text of the input file subject to the following modifications:
+
+- keywords should be printed out with an initial <span class="keyword">
+  tag and followed by a </span> tag.  For example, the "while" keyword
+  would be output as <span class="keyword">while</span>.
+
+- comments, both single and multiple line forms should be wrapped
+  in a similar pair of span tags that uses the "comment" tag.
+
+- integer literals should be tagged using a span with class
+  "literal".
+
+- less than (<), greater than (>), and ampersand symbols (&)
+  should be replaced with "&lt;", "&gt;", and "&amp;",
+  respectively (without the double quotes) in the output.
+
+All other parts of the input file (including identifiers,
+whitespace, punctuation, etc.) should be copied to the output
+without change.  (Those of you using jflex might find the
+%standalone directive useful here.)
+
+Note also that it is acceptable to write your syntax coloring
+lexer as a program that reads text from standard input and
+writes its output to standard output; in other words, you do not
+need to write code that does "file handling" unless (a) you want
+to, and (b) you already know how to do that!
+
+You should take care to test that your program functions
+correctly.  Although I have only given you one valid Mini
+program so far, you should be able to generate a more
+comprehensive test file (or files) from the descriptions of
+the tokens in mini/Mini.jflex.
+
+Question 2:
+-----------
+Construct regular expressions that will match:
+
+a) any positive decimal integer literal that is less than or
+   equal to the maximum signed integer that can be represented
+   in 32 bits (i.e., 2147483647).
+
+b) any positive decimal integer that is a multiple of four
+   (hint: for numbers with three or more digits, it is enough
+   to consider the last two digits only).
+
+Using these regular expressions, modify your syntax coloring
+program so that it tags any integer literal that is greater
+than 2147483647 with an "invalid" span, unless it is also a
+multiple of four, in which case it should still be tagged
+using the "literal" class.
+
+[Note: Excluding multiples of four like this isn't something
+I'd expect to be useful in practice; I'm just testing your
+ability to use your lex-like tool effectively!]
+
+------------------------------------------------------------------------

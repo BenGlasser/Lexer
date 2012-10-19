@@ -1,0 +1,16 @@
+// A simple Mini test program
+
+int i = 0;    // initialize
+while (i <= 10) {
+  print i*i;  // print a square
+  i = i + 1;
+  2147483647
+  3147483648
+  3147483649
+  3147483650
+  3147483651
+  
+  qwertyuiop[]asdfghjkl;'zxcvbnm,.
+  /QWERTYUIOP{}ASDFGHJKL:"ZXCVBNM<
+  >?1234567890-=!@#$%^&*()_+
+}
